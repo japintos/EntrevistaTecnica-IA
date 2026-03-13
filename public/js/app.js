@@ -83,6 +83,53 @@ const TEXTS = {
   }
 };
 
+const MANUAL_TEXTS = {
+  es: {
+    manualTitle: 'Manual de uso',
+    intro: 'Esta aplicación está pensada para uso local. Cada usuario debe configurar sus propias API keys de IA. Una vez configuradas, el proyecto se encarga del resto.',
+    localTitle: 'Uso local',
+    localText: 'La app se ejecuta en tu máquina (localhost). No hay servidor central: tú controlas tus datos y tus credenciales. Ejecuta "npm start" y abre http://localhost:3000.',
+    keysTitle: 'Configuración de API keys (personal)',
+    keysText: 'Las llamadas a las APIs de IA tienen costo. Cada usuario configura sus credenciales en el archivo .env (no se sube al repo). Opciones:',
+    'keys-groq': 'Gratis, tier generoso. Obtén tu key en',
+    'keys-ollama': 'Gratis, corre local. Instala Ollama y ejecuta ollama run llama3.2',
+    'keys-paid': 'Tienen costo. Obtén keys en las consolas de cada proveedor.',
+    usageTitle: 'Cómo usar',
+    step1: 'Configura tu .env con una API key (ver sección anterior).',
+    step2: 'Ejecuta npm start y abre http://localhost:3000',
+    step3: 'Elige idioma, nivel (Junior/Ssr/Senior) y cantidad de preguntas.',
+    step4: 'Responde cada pregunta por texto o voz. La IA evalúa y da feedback.',
+    step5: 'Al final verás tu puntuación y desglose (correctas, incompletas, incorrectas).',
+    step6: 'Exporta el informe en PDF con todos los detalles.',
+    featuresTitle: 'Funcionalidades',
+    featuresList: '<li>Preguntas adaptadas a tu nivel</li><li>Feedback con explicación y sugerencias</li><li>Exportación a PDF detallado</li><li>Modo texto y voz</li><li>Historial de la sesión</li><li>Evaluación final con puntuación</li>',
+    creditsTitle: 'Créditos',
+    creditsText: 'Desarrollado por Julio Pintos. Powered by WebXpert y Groq (IA).'
+  },
+  en: {
+    manualTitle: 'User manual',
+    intro: 'This application is designed for local use. Each user must configure their own AI API keys. Once configured, the project handles the rest.',
+    localTitle: 'Local use',
+    localText: 'The app runs on your machine (localhost). There is no central server: you control your data and credentials. Run "npm start" and open http://localhost:3000.',
+    keysTitle: 'API keys configuration (personal)',
+    keysText: 'AI API calls have a cost. Each user configures their credentials in the .env file (not committed to the repo). Options:',
+    'keys-groq': 'Free, generous tier. Get your key at',
+    'keys-ollama': 'Free, runs locally. Install Ollama and run ollama run llama3.2',
+    'keys-paid': 'Paid. Get keys from each provider\'s console.',
+    usageTitle: 'How to use',
+    step1: 'Configure your .env with an API key (see previous section).',
+    step2: 'Run npm start and open http://localhost:3000',
+    step3: 'Choose language, level (Junior/Ssr/Senior) and number of questions.',
+    step4: 'Answer each question by text or voice. The AI evaluates and gives feedback.',
+    step5: 'At the end you\'ll see your score and breakdown (correct, incomplete, incorrect).',
+    step6: 'Export the detailed report as PDF.',
+    featuresTitle: 'Features',
+    featuresList: '<li>Questions adapted to your level</li><li>Feedback with explanation and suggestions</li><li>Detailed PDF export</li><li>Text and voice mode</li><li>Session history</li><li>Final evaluation with score</li>',
+    creditsTitle: 'Credits',
+    creditsText: 'Developed by Julio Pintos. Powered by WebXpert and Groq (AI).'
+  }
+};
+
 const SCORE_MAP = { correct: 10, incomplete: 6, incorrect: 1 };
 
 let state = {
@@ -126,7 +173,11 @@ const DOM = {
   exportBtn: document.getElementById('exportBtn'),
   restartBtn: document.getElementById('restartBtn'),
   overlay: document.getElementById('overlay'),
-  sessionBadge: document.getElementById('sessionBadge')
+  sessionBadge: document.getElementById('sessionBadge'),
+  manualModal: document.getElementById('manualModal'),
+  closeManualBtn: document.getElementById('closeManualBtn'),
+  manualBtnConfig: document.getElementById('manualBtnConfig'),
+  manualBtnHeader: document.getElementById('manualBtnHeader')
 };
 
 function t(key) {
@@ -363,6 +414,58 @@ function escapeHtml(text) {
 function toggleHistoryPanel() {
   DOM.historyPanel.classList.toggle('open');
   DOM.overlay.classList.toggle('visible');
+}
+
+function getManualLanguage() {
+  const langSelect = document.getElementById('language');
+  return (langSelect && langSelect.value) || state.config.language || 'es';
+}
+
+function populateManualContent() {
+  const lang = getManualLanguage();
+  const texts = MANUAL_TEXTS[lang] || MANUAL_TEXTS.es;
+
+  document.querySelector('.manual-header h2').textContent = texts.manualTitle;
+  document.querySelector('.manual-intro-text').textContent = texts.intro;
+
+  document.querySelector('[data-section="local"] .manual-section-title').textContent = texts.localTitle;
+  document.querySelector('[data-section="local"] [data-lang="local-text"]').textContent = texts.localText;
+
+  document.querySelector('[data-section="keys"] .manual-section-title').textContent = texts.keysTitle;
+  document.querySelector('[data-section="keys"] [data-lang="keys-text"]').textContent = texts.keysText;
+  document.querySelectorAll('[data-lang="keys-groq"]').forEach(el => { el.textContent = texts['keys-groq']; });
+  document.querySelectorAll('[data-lang="keys-ollama"]').forEach(el => { el.textContent = texts['keys-ollama']; });
+  document.querySelectorAll('[data-lang="keys-paid"]').forEach(el => { el.textContent = texts['keys-paid']; });
+
+  document.querySelector('[data-section="usage"] .manual-section-title').textContent = texts.usageTitle;
+  document.querySelector('[data-section="usage"] [data-lang="step1"]').textContent = texts.step1;
+  document.querySelector('[data-section="usage"] [data-lang="step2"]').textContent = texts.step2;
+  document.querySelector('[data-section="usage"] [data-lang="step3"]').textContent = texts.step3;
+  document.querySelector('[data-section="usage"] [data-lang="step4"]').textContent = texts.step4;
+  document.querySelector('[data-section="usage"] [data-lang="step5"]').textContent = texts.step5;
+  document.querySelector('[data-section="usage"] [data-lang="step6"]').textContent = texts.step6;
+
+  document.querySelector('[data-section="features"] .manual-section-title').textContent = texts.featuresTitle;
+  const featuresEl = document.querySelector('[data-section="features"] [data-lang="features-list"]');
+  if (featuresEl) featuresEl.innerHTML = texts.featuresList;
+
+  document.querySelector('[data-section="credits"] .manual-section-title').textContent = texts.creditsTitle;
+  document.querySelector('[data-section="credits"] [data-lang="credits-text"]').textContent = texts.creditsText;
+}
+
+function openManual() {
+  populateManualContent();
+  DOM.manualModal.classList.add('open');
+  document.querySelectorAll('.manual-section').forEach(s => s.classList.remove('open'));
+  document.querySelector('.manual-section').classList.add('open');
+}
+
+function closeManual() {
+  DOM.manualModal.classList.remove('open');
+}
+
+function toggleManualSection(sectionEl) {
+  sectionEl.classList.toggle('open');
 }
 
 async function exportHistory() {
@@ -617,3 +720,11 @@ DOM.restartBtn.addEventListener('click', restart);
 DOM.nextQuestionBtn.addEventListener('click', goToNextQuestion);
 DOM.newInterviewBtn.addEventListener('click', restart);
 DOM.exportResultsBtn.addEventListener('click', exportToPdf);
+
+DOM.manualBtnConfig?.addEventListener('click', openManual);
+DOM.manualBtnHeader?.addEventListener('click', openManual);
+DOM.closeManualBtn?.addEventListener('click', closeManual);
+document.getElementById('manualBackdrop')?.addEventListener('click', closeManual);
+document.querySelectorAll('.manual-section-btn').forEach(btn => {
+  btn.addEventListener('click', () => toggleManualSection(btn.closest('.manual-section')));
+});

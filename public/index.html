@@ -14,10 +14,19 @@
     <!-- Pantalla de configuración -->
     <section class="config-screen" id="configScreen">
       <div class="config-card">
-        <div class="logo">
-          <span class="logo-icon">⚡</span>
-          <h1>Entrevista Técnica IA</h1>
-          <p class="tagline">Tu entrenador personal para entrevistas de desarrollo</p>
+        <div class="config-card-header">
+          <div class="logo">
+            <span class="logo-icon">⚡</span>
+            <h1>Entrevista Técnica IA</h1>
+            <p class="tagline">Tu entrenador personal para entrevistas de desarrollo</p>
+          </div>
+          <button type="button" class="btn-icon btn-manual" id="manualBtnConfig" title="Manual de uso">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </button>
         </div>
 
         <form class="config-form" id="configForm">
@@ -60,6 +69,13 @@
     <section class="interview-screen hidden" id="interviewScreen">
       <header class="interview-header">
         <div class="header-left">
+          <button class="btn-icon" id="manualBtnHeader" title="Manual de uso">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </button>
           <button class="btn-icon" id="menuBtn" title="Historial">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -176,6 +192,93 @@
     </aside>
 
     <div class="overlay" id="overlay"></div>
+
+    <!-- Modal Manual de uso -->
+    <div class="manual-modal" id="manualModal">
+      <div class="manual-backdrop" id="manualBackdrop"></div>
+      <div class="manual-dialog">
+        <div class="manual-header">
+          <h2>Manual de uso</h2>
+          <button type="button" class="btn-icon btn-close" id="closeManualBtn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="manual-body">
+          <div class="manual-intro" data-lang="intro">
+            <p class="manual-intro-text"></p>
+          </div>
+          <div class="manual-accordion">
+            <div class="manual-section" data-section="local">
+              <button type="button" class="manual-section-btn">
+                <span class="manual-section-title"></span>
+                <span class="manual-section-icon">▼</span>
+              </button>
+              <div class="manual-section-content">
+                <p data-lang="local-text"></p>
+              </div>
+            </div>
+            <div class="manual-section" data-section="keys">
+              <button type="button" class="manual-section-btn">
+                <span class="manual-section-title"></span>
+                <span class="manual-section-icon">▼</span>
+              </button>
+              <div class="manual-section-content">
+                <p data-lang="keys-text"></p>
+                <ul class="manual-list">
+                  <li><strong>Groq</strong> — <span data-lang="keys-groq"></span> <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a></li>
+                  <li><strong>Ollama</strong> — <span data-lang="keys-ollama"></span></li>
+                  <li><strong>Google Gemini / OpenAI</strong> — <span data-lang="keys-paid"></span></li>
+                </ul>
+              </div>
+            </div>
+            <div class="manual-section" data-section="usage">
+              <button type="button" class="manual-section-btn">
+                <span class="manual-section-title"></span>
+                <span class="manual-section-icon">▼</span>
+              </button>
+              <div class="manual-section-content">
+                <ol class="manual-steps">
+                  <li data-lang="step1"></li>
+                  <li data-lang="step2"></li>
+                  <li data-lang="step3"></li>
+                  <li data-lang="step4"></li>
+                  <li data-lang="step5"></li>
+                  <li data-lang="step6"></li>
+                </ol>
+              </div>
+            </div>
+            <div class="manual-section" data-section="features">
+              <button type="button" class="manual-section-btn">
+                <span class="manual-section-title"></span>
+                <span class="manual-section-icon">▼</span>
+              </button>
+              <div class="manual-section-content">
+                <ul class="manual-list" data-lang="features-list"></ul>
+              </div>
+            </div>
+            <div class="manual-section" data-section="credits">
+              <button type="button" class="manual-section-btn">
+                <span class="manual-section-title"></span>
+                <span class="manual-section-icon">▼</span>
+              </button>
+              <div class="manual-section-content">
+                <p data-lang="credits-text"></p>
+                <div class="manual-credits-logos">
+                  <a href="https://www.webxpert.com.ar" target="_blank" rel="noopener">
+                    <img src="img/webExpert%20lab%201.jpg" alt="WebXpert" class="manual-logo">
+                  </a>
+                  <a href="https://groq.com" target="_blank" rel="noopener">
+                    <img src="img/grok.png" alt="Groq" class="manual-logo">
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <footer class="powered-by">
