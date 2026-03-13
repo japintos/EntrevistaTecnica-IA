@@ -112,8 +112,15 @@ body::before {
   position: absolute;
   top: 0;
   right: 0;
+  width: 48px;
+  height: 48px;
   color: var(--text-muted);
   transition: color var(--transition);
+}
+
+.btn-manual svg {
+  width: 29px;
+  height: 29px;
 }
 
 .btn-manual:hover {
