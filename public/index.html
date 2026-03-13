@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrevista Técnica IA | Entrena para tu próxima entrevista</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <!-- Pantalla de configuración -->
+    <section class="config-screen" id="configScreen">
+      <div class="config-card">
+        <div class="logo">
+          <span class="logo-icon">⚡</span>
+          <h1>Entrevista Técnica IA</h1>
+          <p class="tagline">Tu entrenador personal para entrevistas de desarrollo</p>
+        </div>
+
+        <form class="config-form" id="configForm">
+          <div class="form-group">
+            <label for="language">Idioma</label>
+            <select id="language" name="language">
+              <option value="es">Español</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="level">Nivel de dificultad</label>
+            <select id="level" name="level">
+              <option value="junior">Junior</option>
+              <option value="ssr" selected>Semi Senior (Ssr)</option>
+              <option value="senior">Senior</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="questionCount">Cantidad de preguntas</label>
+            <select id="questionCount" name="questionCount">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="startBtn">
+            <span>Comenzar entrevista</span>
+            <span class="btn-arrow">→</span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Pantalla de entrevista -->
+    <section class="interview-screen hidden" id="interviewScreen">
+      <header class="interview-header">
+        <div class="header-left">
+          <button class="btn-icon" id="menuBtn" title="Historial">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </button>
+          <span class="session-badge" id="sessionBadge">Ssr · Español</span>
+        </div>
+        <div class="header-right">
+          <button class="btn-icon" id="exportBtn" title="Exportar PDF">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+          </button>
+          <button class="btn btn-outline" id="restartBtn">Reiniciar</button>
+        </div>
+      </header>
+
+      <main class="interview-main">
+        <div class="question-area">
+          <div class="question-meta">
+            <span class="question-label">Pregunta del entrevistador</span>
+            <span class="question-progress" id="questionProgress">1 / 10</span>
+          </div>
+          <div class="question-content" id="questionContent">
+            <div class="loading-dots" id="questionLoading">
+              <span></span><span></span><span></span>
+            </div>
+            <p class="question-text hidden" id="questionText"></p>
+          </div>
+        </div>
+
+        <div class="response-area">
+          <div class="response-header">
+            <label for="answerInput">Tu respuesta</label>
+            <div class="input-modes">
+              <button type="button" class="mode-btn active" data-mode="text" title="Escribir">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                </svg>
+              </button>
+              <button type="button" class="mode-btn" data-mode="voice" title="Voz">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+                  <path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="input-wrapper">
+            <textarea id="answerInput" placeholder="Escribe tu respuesta aquí..." rows="4" disabled></textarea>
+            <button class="btn-voice" id="voiceBtn" title="Grabar voz" disabled>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+                <path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/>
+              </svg>
+            </button>
+          </div>
+          <button class="btn btn-primary btn-submit" id="submitBtn" disabled>
+            Enviar respuesta
+          </button>
+        </div>
+
+        <div class="feedback-area hidden" id="feedbackArea">
+          <div class="feedback-header">
+            <span class="feedback-badge" id="feedbackBadge">Correcta</span>
+          </div>
+          <div class="feedback-content">
+            <div class="feedback-section">
+              <h4>Explicación</h4>
+              <p id="feedbackExplanation"></p>
+            </div>
+            <div class="feedback-section">
+              <h4>Sugerencias</h4>
+              <p id="feedbackSuggestions"></p>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-next" id="nextQuestionBtn">
+            Siguiente pregunta →
+          </button>
+        </div>
+
+        <!-- Pantalla de evaluación final -->
+        <section class="results-screen hidden" id="resultsScreen">
+          <div class="results-card">
+            <h2>Evaluación de la entrevista</h2>
+            <div class="score-circle" id="scoreCircle">
+              <span class="score-value" id="scoreValue">0</span>
+              <span class="score-max">/10</span>
+            </div>
+            <div class="score-breakdown" id="scoreBreakdown"></div>
+            <p class="score-message" id="scoreMessage"></p>
+            <div class="results-actions">
+              <button class="btn btn-primary" id="newInterviewBtn">Nueva entrevista</button>
+              <button class="btn btn-outline" id="exportResultsBtn">Exportar resultados</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </section>
+
+    <!-- Panel lateral de historial -->
+    <aside class="history-panel" id="historyPanel">
+      <div class="panel-header">
+        <h3>Historial</h3>
+        <button class="btn-icon btn-close" id="closeHistoryBtn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="history-list" id="historyList">
+        <!-- Items dinámicos -->
+      </div>
+    </aside>
+
+    <div class="overlay" id="overlay"></div>
+  </div>
+
+  <footer class="powered-by">
+    <span class="powered-by-label">Powered by</span>
+    <a href="https://www.webxpert.com.ar" target="_blank" rel="noopener noreferrer" class="powered-by-link">
+      <img src="img/webExpert%20lab%201.jpg" alt="WebXpert" class="powered-by-logo">
+    </a>
+    <span class="powered-by-dev">Desarrollador Julio Pintos</span>
+    <a href="https://groq.com" target="_blank" rel="noopener noreferrer" class="powered-by-groq" title="IA por Groq">
+      <img src="img/grok.png" alt="Groq" class="powered-by-groq-logo">
+    </a>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
